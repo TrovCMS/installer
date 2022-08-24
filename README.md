@@ -1,9 +1,11 @@
 # Trov CMS Installer
 
+:bangbang: Do not use this yet. It's still a work in progress :bangbang:
+
 Install globally with composer.
 
 ```bash
-composer global require awcodes/trov-installer
+composer global require trovcms/installer
 ```
 
 Now you can run the `new` command to quickly set up a new Trov CMS Project.
@@ -14,8 +16,6 @@ trov new `directory name`
 
 ## Options / Flags
 
-* --dark (Default Filament to be dark mode enabled)
-* --themed (Install custom theme scaffolding)
 * --force (Forces install even if the directory already exists)
 
 ## License
