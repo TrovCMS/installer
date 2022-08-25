@@ -8,6 +8,7 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -34,7 +35,8 @@ class NewCommand extends Command
             ->addOption('faqs', null, InputOption::VALUE_NONE, 'Install FAQs Module')
             ->addOption('discoveries', null, InputOption::VALUE_NONE, 'Install Discovery Center Module (Topic and Articles)')
             ->addOption('airport', null, InputOption::VALUE_NONE, 'Install the Airport Module (Landing Pages)')
-            ->addOption('sheets', null, InputOption::VALUE_NONE, 'Install Sheets Module (Unbranded Pages)');
+            ->addOption('sheets', null, InputOption::VALUE_NONE, 'Install Sheets Module (Unbranded Pages)')
+            ->addOption('blog', null, InputOption::VALUE_NONE, 'Install Blog Module');
     }
 
     /**
@@ -46,6 +48,8 @@ class NewCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $io = new SymfonyStyle($input, $output);
+
         sleep(1);
 
         $continue = true;
@@ -57,7 +61,7 @@ class NewCommand extends Command
         $version = Utils::getVersion($input);
 
         if (! $input->getOption('force')) {
-            $this->verifyApplicationDoesntExist($directory);
+            Utils::verifyApplicationDoesntExist($directory);
         }
 
         if ($input->getOption('force') && $directory === '.') {
@@ -68,9 +72,11 @@ class NewCommand extends Command
 
         render('<div class="text-green-500">Installing Trov CMS...</div>');
 
+        $quiet = $input->getOption('quiet') ? '--quiet' : '';
+
         $commands = [
             // $composer." create-project laravel/laravel \"$directory\" $version --remove-vcs --prefer-dist --quiet",
-            $composer . " create-project trovcms/trov \"$directory\" $version --repository '{\"type\": \"path\", \"url\": \"~/Sites/trovcms\", \"options\": {\"symlink\": false}}' --remove-vcs --prefer-dist --quiet"
+            $composer . " create-project trovcms/trov \"$directory\" $version --repository '{\"type\": \"vcs\", \"url\": \"git@github.com:TrovCMS/trov.git\", \"options\": {\"symlink\": false}}' --remove-vcs --prefer-dist $quiet"
         ];
 
         if ($directory != '.' && $input->getOption('force')) {
@@ -94,68 +100,106 @@ class NewCommand extends Command
                 );
 
                 Utils::replaceInFile(
-                    'DB_DATABASE=laravel',
+                    'DB_DATABASE=trovplay',
                     'DB_DATABASE='.str_replace('-', '_', strtolower($name)),
                     $directory.'/.env'
                 );
 
                 Utils::replaceInFile(
-                    'DB_DATABASE=laravel',
+                    'DB_DATABASE=trovplay',
                     'DB_DATABASE='.str_replace('-', '_', strtolower($name)),
                     $directory.'/.env.example'
                 );
             }
-        }
 
-        /**
-         * Install Filament, Settings and Packages
-         */
-        if ($continue) {
             if ($input->getOption('airport')) {
-                render('<div class="text-green-500">Installing Airport Module...</div>');
+                (new Modules\AirportModule())->install($directory, $input, $output);
             }
 
             if ($input->getOption('discoveries')) {
-                render('<div class="text-green-500">Installing Discovery Center Module...</div>');
+                (new Modules\DiscoveriesModule())->install($directory, $input, $output);
             }
 
             if ($input->getOption('faqs')) {
-                render('<div class="text-green-500">Installing FAQs Module...</div>');
+                (new Modules\FaqModule())->install($directory, $input, $output);
             }
 
             if ($input->getOption('sheets')) {
-                render('<div class="text-green-500">Installing Sheets Module...</div>');
+                (new Modules\SheetModule())->install($directory, $input, $output);
             }
+
+            if ($input->getOption('blog')) {
+                (new Modules\BlogModule())->install($directory, $input, $output);
+            }
+
+            /**
+             * Commit and push to Github
+             */
+            if ($input->getOption('git') || $input->getOption('github') !== false) {
+                render('<div class="text-green-500">Creating repository...</div>');
+                $this->createRepository($directory, $input, $output);
+            }
+
+            if ($input->getOption('github') !== false) {
+                render('<div class="text-green-500">Pushing to GitHub...</div>');
+                $this->pushToGitHub($name, $directory, $input, $output);
+                $output->writeln('');
+            }
+
+            if ($io->confirm('Would you like to run migrations? This requires your database and env to be setup first.', false)) {
+                chdir($directory);
+
+                $commands = array_filter([
+                    'php artisan vendor:publish --provider="Spatie\Tags\TagsServiceProvider" --tag="tags-migrations"',
+                    'php artisan migrate:fresh',
+                    'php artisan db:seed',
+                ]);
+
+                if (($process = Utils::runCommands($commands, $input, $output))->isSuccessful()) {
+                    render('<div class="mt-1 text-green-500">Migrations successfully run.</div>');
+                } else {
+                    render('<div class="mt-1 text-yellow-500">There was a problem running the migrations.</div>');
+
+                    render(<<<HTML
+                        <ol class="pl-2">
+                            <li>cd {$name}</li>
+                            <li>php artisan migrate</li>
+                            <li>php artisan shield:install</li>
+                            <li>Login at <a href="http://{$name}.test/admin/login">http://{$name}.test/admin/login</a></li>
+                        </ol>
+                    HTML);
+                }
+            } else {
+                render('<div class="mt-1 text-green-500">Next Steps</div>');
+
+                render(<<<HTML
+                    <ol class="pl-2">
+                        <li>cd {$name}</li>
+                        <li>php artisan migrate</li>
+                        <li>php artisan shield:install</li>
+                        <li>Login at <a href="http://{$name}.test/admin/login">http://{$name}.test/admin/login</a></li>
+                    </ol>
+                HTML);
+            }
+
+            render('<div class="bg-green-300 px-1 mt-1 font-bold text-green-900">New Trov CMS project successfully installed! 🎉</div>');
+            render('<div class="mt-1 text-green-500">If you\'d like to install the Demo Content:</div>');
+            render(<<<HTML
+                <ol class="pl-2">
+                    <li>cd {$name}</li>
+                    <li>php artisan db:seed --class=DemoSeeder</li>
+                    <li>
+                        Login at <a href="http://{$name}.test/admin/login">http://{$name}.test/admin/login</a>
+                        <ul>
+                            <li>Username: super@trov.com</li>
+                            <li>Password: password</li>
+                        </ul>
+                    </li>
+                </ol>
+            HTML);
         }
 
-        /**
-         * Commit and push to Github
-         */
-        if ($input->getOption('git') || $input->getOption('github') !== false) {
-            render('<div class="text-green-500">Creating repository...</div>');
-            $this->createRepository($directory, $input, $output);
-        }
-
-        if ($input->getOption('github') !== false) {
-            render('<div class="text-green-500">Pushing to GitHub...</div>');
-            $this->pushToGitHub($name, $directory, $input, $output);
-            $output->writeln('');
-        }
-
-        render('<div class="bg-green-300 px-1 mt-1 font-bold text-green-900">New Trov CMS project installed!</div>');
-
-        render('<div class="mt-1 text-green-500">Next Steps</div>');
-
-        render(<<<HTML
-            <ol class="pl-2">
-                <li>cd {$name}</li>
-                <li>php artisan migrate</li>
-                <li>php artisan shield:install</li>
-                <li>Login at <a href="http://{$name}.test/admin/login">http://{$name}.test/admin/login</a></li>
-            </ol>
-        HTML);
-
-        return $process->getExitCode();
+        return Command::SUCCESS;
     }
 
     /**
@@ -256,16 +300,5 @@ class NewCommand extends Command
         $this->runCommands($commands, $input, $output, ['GIT_TERMINAL_PROMPT' => 0]);
     }
 
-    /**
-     * Verify that the application does not already exist.
-     *
-     * @param  string  $directory
-     * @return void
-     */
-    protected function verifyApplicationDoesntExist($directory)
-    {
-        if ((is_dir($directory) || is_file($directory)) && $directory != getcwd()) {
-            throw new RuntimeException('Application already exists!');
-        }
-    }
+
 }

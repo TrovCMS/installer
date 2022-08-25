@@ -9,6 +9,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Utils
 {
     /**
+     * Verify that the application does not already exist.
+     *
+     * @param  string  $directory
+     * @return void
+     */
+    public function verifyApplicationDoesntExist($directory)
+    {
+        if ((is_dir($directory) || is_file($directory)) && $directory != getcwd()) {
+            throw new RuntimeException('Application already exists!');
+        }
+    }
+
+    /**
      * Get the version that should be downloaded.
      *
      * @param  \Symfony\Component\Console\Input\InputInterface  $input

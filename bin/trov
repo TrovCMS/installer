@@ -9,5 +9,6 @@ if (file_exists(__DIR__.'/../../../autoload.php')) {
 
 $app = new Symfony\Component\Console\Application('TRov Installer', '1.0.0');
 $app->add(new Trov\Installer\Console\NewCommand);
+$app->add(new Trov\Installer\Console\AddCommand);
 
 $app->run();
