@@ -17,7 +17,7 @@ class Utils
     public static function verifyApplicationDoesntExist($directory)
     {
         if ((is_dir($directory) || is_file($directory)) && $directory != getcwd()) {
-            throw new RuntimeException('Application already exists!');
+            throw new \RuntimeException('Application already exists!');
         }
     }
 
