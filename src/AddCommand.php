@@ -22,13 +22,12 @@ class AddCommand extends Command
     {
         $this
             ->setName('add')
-            ->setDescription('Add Module(s) into Trov CMS application')
+            ->setDescription('Add Module(s) into a Trov CMS application')
             ->addOption('faqs', null, InputOption::VALUE_NONE, 'Install FAQs Module')
             ->addOption('discoveries', null, InputOption::VALUE_NONE, 'Install Discovery Center Module (Topic and Articles)')
             ->addOption('airport', null, InputOption::VALUE_NONE, 'Install the Airport Module (Landing Pages)')
             ->addOption('sheets', null, InputOption::VALUE_NONE, 'Install Sheets Module (Unbranded Pages)')
-            ->addOption('blog', null, InputOption::VALUE_NONE, 'Install Blog Module')
-            ->addOption('force', 'f', InputOption::VALUE_NONE);
+            ->addOption('blog', null, InputOption::VALUE_NONE, 'Install Blog Module');
     }
 
     /**

@@ -36,7 +36,8 @@ class NewCommand extends Command
             ->addOption('discoveries', null, InputOption::VALUE_NONE, 'Install Discovery Center Module (Topic and Articles)')
             ->addOption('airport', null, InputOption::VALUE_NONE, 'Install the Airport Module (Landing Pages)')
             ->addOption('sheets', null, InputOption::VALUE_NONE, 'Install Sheets Module (Unbranded Pages)')
-            ->addOption('blog', null, InputOption::VALUE_NONE, 'Install Blog Module');
+            ->addOption('blog', null, InputOption::VALUE_NONE, 'Install Blog Module')
+            ->addOption('all', null, InputOption::VALUE_NONE, 'Install All Modules');
     }
 
     /**
@@ -72,11 +73,9 @@ class NewCommand extends Command
 
         render('<div class="text-green-500">Installing Trov CMS...</div>');
 
-        $quiet = $input->getOption('quiet') ? '--quiet' : '';
-
         $commands = [
-            // $composer." create-project laravel/laravel \"$directory\" $version --remove-vcs --prefer-dist --quiet",
-            $composer . " create-project trovcms/trov \"$directory\" $version --repository '{\"type\": \"vcs\", \"url\": \"git@github.com:TrovCMS/trov.git\", \"options\": {\"symlink\": false}}' --remove-vcs --prefer-dist $quiet"
+            $composer . " create-project trovcms/trov \"$directory\" $version --remove-vcs --prefer-dist",
+            // $composer . " create-project trovcms/trov \"$directory\" $version --remove-vcs --prefer-dist --repository '{\"type\": \"vcs\", \"url\": \"git@github.com:TrovCMS/trov.git\", \"options\": {\"symlink\": false}}'"
         ];
 
         if ($directory != '.' && $input->getOption('force')) {
@@ -112,23 +111,23 @@ class NewCommand extends Command
                 );
             }
 
-            if ($input->getOption('airport')) {
+            if ($input->getOption('airport') || $input->getOption('all')) {
                 (new Modules\AirportModule())->install($directory, $input, $output);
             }
 
-            if ($input->getOption('discoveries')) {
+            if ($input->getOption('discoveries') || $input->getOption('all')) {
                 (new Modules\DiscoveriesModule())->install($directory, $input, $output);
             }
 
-            if ($input->getOption('faqs')) {
+            if ($input->getOption('faqs') || $input->getOption('all')) {
                 (new Modules\FaqModule())->install($directory, $input, $output);
             }
 
-            if ($input->getOption('sheets')) {
+            if ($input->getOption('sheets') || $input->getOption('all')) {
                 (new Modules\SheetModule())->install($directory, $input, $output);
             }
 
-            if ($input->getOption('blog')) {
+            if ($input->getOption('blog') || $input->getOption('all')) {
                 (new Modules\BlogModule())->install($directory, $input, $output);
             }
 
@@ -164,7 +163,7 @@ class NewCommand extends Command
                         <ol class="pl-2">
                             <li>cd {$name}</li>
                             <li>php artisan migrate</li>
-                            <li>php artisan shield:install</li>
+                            <li>php artisan db:seed</li>
                             <li>Login at <a href="http://{$name}.test/admin/login">http://{$name}.test/admin/login</a></li>
                         </ol>
                     HTML);
@@ -176,7 +175,7 @@ class NewCommand extends Command
                     <ol class="pl-2">
                         <li>cd {$name}</li>
                         <li>php artisan migrate</li>
-                        <li>php artisan shield:install</li>
+                        <li>php artisan db:seed</li>
                         <li>Login at <a href="http://{$name}.test/admin/login">http://{$name}.test/admin/login</a></li>
                     </ol>
                 HTML);
