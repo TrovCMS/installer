@@ -51,6 +51,14 @@ php artisan shield:generate
 
 - Check if you're using the correct PHP version (>8.1)
 
+### Notes for Windows users
+
+You might need to create a symlink to the storage manually. You can do so easily with the following command
+
+```bash
+php artisan storage:link
+```
+
 ## License
 
 Trov Installer is open-sourced software licensed under the [MIT license](LICENSE.md).
