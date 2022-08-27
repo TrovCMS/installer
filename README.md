@@ -38,10 +38,20 @@ After adding the module you will need to run the migrations and generate the pol
 
 ```bash
 php artisan:migrate
-php shield:generate
+php artisan shield:generate
 ```
 
-## Notes for Windows users
+## Common issues
+
+### Composer global install gives an error
+
+- You should check your global composer.json file for conflicting packages. Or run `composer global update` and see if this resolves the issue.
+
+### I cannot install the composer package?
+
+- Check if you're using the correct PHP version (>8.1)
+
+### Notes for Windows users
 
 You might need to create a symlink to the storage manually. You can do so easily with the following command
 
