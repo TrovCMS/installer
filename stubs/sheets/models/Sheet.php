@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Trov\Concerns\HasMeta;
-use Trov\Concerns\HasAuthor;
-use Trov\Concerns\Sluggable;
-use Trov\Concerns\HasPublishedScope;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Trov\Concerns\HasAuthor;
+use Trov\Concerns\HasMeta;
+use Trov\Concerns\HasPublishedScope;
+use Trov\Concerns\Sluggable;
 
 class Sheet extends Model
 {
@@ -52,11 +52,11 @@ class Sheet extends Model
 
     public function getBasePath()
     {
-        return '/' . $this->type;
+        return '/'.$this->type;
     }
 
     public function getPublicUrl()
     {
-        return url()->to($this->getBasePath() . '/' . $this->slug . '/');
+        return url()->to($this->getBasePath().'/'.$this->slug.'/');
     }
 }

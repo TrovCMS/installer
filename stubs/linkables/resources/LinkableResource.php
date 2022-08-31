@@ -2,20 +2,12 @@
 
 namespace App\Filament\Resources\Trov;
 
-use Filament\Forms;
-use Filament\Tables;
 use App\Models\Linkable;
-use Filament\Resources\Form;
-use Filament\Resources\Table;
-use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Repeater;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use App\Filament\Resources\Trov\LinkableResource\RelationManagers;
-use App\Filament\Resources\Trov\LinkableResource\Pages\EditLinkable;
-use App\Filament\Resources\Trov\LinkableResource\Pages\ListLinkables;
-use App\Filament\Resources\Trov\LinkableResource\Pages\CreateLinkable;
+use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
 
 class LinkableResource extends Resource
 {

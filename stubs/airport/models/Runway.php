@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Trov\Concerns\Sluggable;
-use Trov\Concerns\HasPublishedScope;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Trov\Concerns\HasPublishedScope;
+use Trov\Concerns\Sluggable;
 
 class Runway extends Model
 {
@@ -48,6 +48,6 @@ class Runway extends Model
 
     public function getPublicUrl()
     {
-        return url()->to($this->getBasePath() . '/' . $this->slug . '/');
+        return url()->to($this->getBasePath().'/'.$this->slug.'/');
     }
 }

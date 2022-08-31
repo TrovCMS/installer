@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\Trov\LinkableResource\RelationManagers;
 
-use Filament\Resources\Form;
-use Filament\Resources\Table;
 use App\Filament\Resources\Trov\LinkableResource;
+use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\MorphManyRelationManager;
+use Filament\Resources\Table;
 
 class LinkablesRelationManager extends MorphManyRelationManager
 {

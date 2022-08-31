@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\DiscoveryTopicResource\Pages;
 
-use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\DiscoveryTopicResource;
+use Filament\Resources\Pages\CreateRecord;
 
 class CreateDiscoveryTopic extends CreateRecord
 {

@@ -4,9 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Post;
 use App\Models\User;
-use Illuminate\Support\Str;
-use FilamentCurator\Models\Media;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class PostFactory extends Factory
 {
@@ -65,10 +64,10 @@ class PostFactory extends Factory
                     'bg_color' => '',
                     'blocks' => [
                         [
-                            "type" => "rich-text",
-                            "data" => [
-                                "content" => '<h1>' . Str::title($this->faker->words(rand(3, 8), true)) . '</h1><p>' . collect($this->faker->paragraphs(rand(1, 6)))->implode('</p><p>') . '</p><h2>' . Str::title($this->faker->words(rand(3, 8), true)) . '</h2><p>' . collect($this->faker->paragraphs(rand(1, 6)))->implode('</p><p>') . '</p>',
-                            ]
+                            'type' => 'rich-text',
+                            'data' => [
+                                'content' => '<h1>'.Str::title($this->faker->words(rand(3, 8), true)).'</h1><p>'.collect($this->faker->paragraphs(rand(1, 6)))->implode('</p><p>').'</p><h2>'.Str::title($this->faker->words(rand(3, 8), true)).'</h2><p>'.collect($this->faker->paragraphs(rand(1, 6)))->implode('</p><p>').'</p>',
+                            ],
                         ],
                     ],
                 ],

@@ -2,13 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Meta;
 use App\Models\DiscoveryArticle;
-use FilamentCurator\Models\Media;
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\User;
 use App\Models\DiscoveryTopic;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class DiscoveryArticleFactory extends Factory
 {
@@ -69,10 +67,10 @@ class DiscoveryArticleFactory extends Factory
                     'bg_color' => '',
                     'blocks' => [
                         [
-                            "type" => "rich-text",
-                            "data" => [
-                                "content" => '<h1>' . Str::title($this->faker->words(rand(3, 8), true)) . '</h1><p>' . collect($this->faker->paragraphs(rand(1, 6)))->implode('</p><p>') . '</p><h2>' . Str::title($this->faker->words(rand(3, 8), true)) . '</h2><p>' . collect($this->faker->paragraphs(rand(1, 6)))->implode('</p><p>') . '</p>',
-                            ]
+                            'type' => 'rich-text',
+                            'data' => [
+                                'content' => '<h1>'.Str::title($this->faker->words(rand(3, 8), true)).'</h1><p>'.collect($this->faker->paragraphs(rand(1, 6)))->implode('</p><p>').'</p><h2>'.Str::title($this->faker->words(rand(3, 8), true)).'</h2><p>'.collect($this->faker->paragraphs(rand(1, 6)))->implode('</p><p>').'</p>',
+                            ],
                         ],
                     ],
                 ],

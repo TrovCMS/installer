@@ -7,7 +7,9 @@ use Illuminate\View\Component;
 class Infographic extends Component
 {
     public $media;
+
     public $transcript;
+
     public $embedCode;
 
     /**
@@ -20,7 +22,7 @@ class Infographic extends Component
         $this->media = resolve(config('filament-curator.model'))->where('id', $data['image'])->first();
         $this->transcript = $data['transcript'];
 
-        $this->embedCode = json_encode("<a href=\"" . url()->current() . "\">\r\n\t<img src=\"" . $this->media->url . "\" alt=\"" . $this->media->alt . "\" width=\"" . $this->media->width . "\" height=\"" . $this->media->height . "\">\r\n</a>\r\n<a href=\"" . config('app.url') . "\">By " . config('brand.source', config('app.name')) . "</a>");
+        $this->embedCode = json_encode('<a href="'.url()->current()."\">\r\n\t<img src=\"".$this->media->url.'" alt="'.$this->media->alt.'" width="'.$this->media->width.'" height="'.$this->media->height."\">\r\n</a>\r\n<a href=\"".config('app.url').'">By '.config('brand.source', config('app.name')).'</a>');
     }
 
     /**

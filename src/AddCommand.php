@@ -2,14 +2,11 @@
 
 namespace Trov\Installer\Console;
 
-use RuntimeException;
-use function Termwind\{render};
-use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use function Termwind\{render};
 
 class AddCommand extends Command
 {
@@ -43,10 +40,11 @@ class AddCommand extends Command
 
         $directory = getcwd();
 
-        $isInstalled = is_dir($directory . '/vendor/trovcms');
+        $isInstalled = is_dir($directory.'/vendor/trovcms');
 
         if (! $isInstalled) {
             render('<div class="text-red-500 mt-1">TrovCMS is not installed in this project. Please cd to an existing TrovCMS project and try again.</div>');
+
             return Command::FAILURE;
         }
 

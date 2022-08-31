@@ -3,15 +3,14 @@
 namespace Trov\Installer\Console;
 
 use RuntimeException;
-use function Termwind\{render};
-use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Process\Process;
+use function Termwind\{render};
 
 class NewCommand extends Command
 {
@@ -74,7 +73,7 @@ class NewCommand extends Command
         render('<div class="text-green-500">Installing Trov CMS...</div>');
 
         $commands = [
-            $composer . " create-project trovcms/trov \"$directory\" $version --remove-vcs --prefer-dist",
+            $composer." create-project trovcms/trov \"$directory\" $version --remove-vcs --prefer-dist",
             // $composer . " create-project trovcms/trov \"$directory\" $version --remove-vcs --prefer-dist --repository '{\"type\": \"vcs\", \"url\": \"git@github.com:TrovCMS/trov.git\", \"options\": {\"symlink\": false}}'"
         ];
 
@@ -298,6 +297,4 @@ class NewCommand extends Command
 
         $this->runCommands($commands, $input, $output, ['GIT_TERMINAL_PROMPT' => 0]);
     }
-
-
 }

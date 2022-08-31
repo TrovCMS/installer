@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Trov\Concerns\HasMeta;
-use Trov\Concerns\Sluggable;
-use App\Models\DiscoveryArticle;
-use Trov\Concerns\HasFeaturedImage;
-use Trov\Concerns\HasPublishedScope;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Trov\Concerns\HasFeaturedImage;
+use Trov\Concerns\HasMeta;
+use Trov\Concerns\HasPublishedScope;
+use Trov\Concerns\Sluggable;
 
 class DiscoveryTopic extends Model
 {
@@ -55,7 +54,7 @@ class DiscoveryTopic extends Model
 
     public function getPublicUrl()
     {
-        return url()->to($this->getBasePath() . '/' . $this->slug . '/');
+        return url()->to($this->getBasePath().'/'.$this->slug.'/');
     }
 
     public function articles()

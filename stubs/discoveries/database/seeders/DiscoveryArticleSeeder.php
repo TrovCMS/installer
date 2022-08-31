@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Meta;
 use App\Models\DiscoveryArticle;
+use App\Models\Meta;
 use Illuminate\Database\Seeder;
 
 class DiscoveryArticleSeeder extends Seeder
@@ -18,24 +18,27 @@ class DiscoveryArticleSeeder extends Seeder
         DiscoveryArticle::factory()->count(3)->create()->each(function ($page) {
             $meta = Meta::factory()->make([
                 'metaable_id' => $page->id,
-                'metaable_type' => 'App\Models\DiscoveryArticle'
+                'metaable_type' => 'App\Models\DiscoveryArticle',
             ]);
+
             return $page->meta()->create($meta->toArray());
         });
 
         DiscoveryArticle::factory()->count(5)->inReview()->create()->each(function ($page) {
             $meta = Meta::factory()->make([
                 'metaable_id' => $page->id,
-                'metaable_type' => 'App\Models\DiscoveryArticle'
+                'metaable_type' => 'App\Models\DiscoveryArticle',
             ]);
+
             return $page->meta()->create($meta->toArray());
         });
 
         DiscoveryArticle::factory()->count(15)->published()->create()->each(function ($page) {
             $meta = Meta::factory()->make([
                 'metaable_id' => $page->id,
-                'metaable_type' => 'App\Models\DiscoveryArticle'
+                'metaable_type' => 'App\Models\DiscoveryArticle',
             ]);
+
             return $page->meta()->create($meta->toArray());
         });
     }

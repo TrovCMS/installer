@@ -43,7 +43,7 @@ class DiscoveryPageBuilder
                     ->createItemButtonLabel('Add Block')
                     ->blocks([
                         RichText::make(),
-						Infographic::make(),
+                        Infographic::make(),
                         Tabs::make(),
                     ]),
             ]);

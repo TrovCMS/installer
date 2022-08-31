@@ -2,10 +2,9 @@
 
 namespace App\Forms\Blocks;
 
-use Illuminate\Support\HtmlString;
-use FilamentCurator\Forms\Components\MediaPicker;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Builder\Block;
+use Filament\Forms\Components\Textarea;
+use FilamentCurator\Forms\Components\MediaPicker;
 
 class Infographic
 {
