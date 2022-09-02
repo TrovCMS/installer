@@ -76,7 +76,7 @@ class InstallBlogModule
             $this->publishStub('app/Http/Controllers/PostController.php', 'blog/controllers/PostController.php');
 
             // Views
-            $this->publishStubDirectory('app/resources/views/blog/', 'blog/views/');
+            $this->publishStubDirectory('resources/views/blog/', 'blog/views/');
         } catch (InstallerException $e) {
             app('console-writer')->exception('Could not install Blog Module.');
             $this->error($e->getMessage());

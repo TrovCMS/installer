@@ -8,15 +8,15 @@ trait InteractsWithStubs
 {
     protected function publishStub(string $file, string $stub): void
     {
-        $projectPath = config('installer.store.project_path');
+        $output = config('installer.store.project_path').'/'.ltrim($file, '/');
 
-        File::put($projectPath.'/'.ltrim($file, '/'), File::get(base_path('stubs/'.ltrim($stub, '/'))));
+        File::put($output, File::get(base_path('stubs/'.ltrim($stub, '/'))));
     }
 
     protected function publishStubDirectory(string $directory, string $stub): void
     {
-        $projectPath = config('installer.store.project_path');
+        $output = config('installer.store.project_path').'/'.ltrim($directory, '/');
 
-        File::copyDirectory(base_path('stubs/'.ltrim($stub, '/')), $projectPath.'/'.ltrim($directory, '/'));
+        File::copyDirectory(base_path('stubs/'.ltrim($stub, '/')), $output);
     }
 }

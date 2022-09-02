@@ -76,7 +76,7 @@ class InstallFaqsModule
             $this->publishStub('app/Http/Controllers/FaqController.php', 'faqs/controllers/FaqController.php');
 
             // Views
-            $this->publishStubDirectory('app/resources/views/faqs/', 'faqs/views/');
+            $this->publishStubDirectory('resources/views/faqs/', 'faqs/views/');
         } catch (InstallerException $e) {
             app('console-writer')->exception('Could not install FAQs Module.');
             $this->error($e->getMessage());

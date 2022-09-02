@@ -76,7 +76,7 @@ class InstallSheetsModule
             $this->publishStub('app/Http/Controllers/SheetController.php', 'sheets/controllers/SheetController.php');
 
             // Views
-            $this->publishStubDirectory('app/resources/views/sheets/', 'sheets/views/');
+            $this->publishStubDirectory('resources/views/sheets/', 'sheets/views/');
         } catch (InstallerException $e) {
             app('console-writer')->exception('Could not install Sheets Module.');
             $this->error($e->getMessage());

@@ -76,7 +76,7 @@ class InstallAirportModule
             $this->publishStub('app/Http/Controllers/AirportController.php', 'airport/controllers/AirportController.php');
 
             // Views
-            $this->publishStubDirectory('app/resources/views/airport/', 'airport/views/');
+            $this->publishStubDirectory('resources/views/airport/', 'airport/views/');
         } catch (InstallerException $e) {
             app('console-writer')->exception('Could not install Airport Module.');
             $this->error($e->getMessage());

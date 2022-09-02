@@ -80,8 +80,8 @@ class InstallDiscoveriesModule
             $this->publishStub('app/Http/Controllers/DiscoveryArticleController.php', 'discoveries/controllers/DiscoveryArticleController.php');
 
             // Views
-            $this->publishStubDirectory('app/resources/views/components/', 'discoveries/components/');
-            $this->publishStubDirectory('app/resources/views/discoveries/', 'discoveries/views/');
+            $this->publishStubDirectory('resources/views/components/', 'discoveries/components/');
+            $this->publishStubDirectory('resources/views/discoveries/', 'discoveries/views/');
         } catch (InstallerException $e) {
             app('console-writer')->exception('Could not install Discoveries Module.');
             $this->error($e->getMessage());
