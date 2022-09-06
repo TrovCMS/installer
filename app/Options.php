@@ -148,6 +148,10 @@ class Options
             'long' => 'demo',
             'cli_description' => 'Seed with demo data',
         ],
+        [
+            'long' => 'with-node',
+            'cli_description' => 'Disable npm install and build',
+        ],
     ];
 
     public function all(): array

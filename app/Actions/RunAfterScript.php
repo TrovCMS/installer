@@ -22,19 +22,6 @@ class RunAfterScript
 
     public function __invoke()
     {
-        if (config('installer.store.shield')) {
-            $this->consoleWriter->logStep('Finishing Filament Shield installation.');
-
-            $shieldInstall = $this->shell->execInProject('php artisan shield:generate');
-
-            if (! $shieldInstall->isSuccessful()) {
-                app('final-steps')->add('Run <span class="text-green-500">php aritsan shield:generate</span>');
-                $this->consoleWriter->warn('Failed to finish installing Filament Shield.');
-            } else {
-                $this->consoleWriter->success('Filament Shield installation completed.');
-            }
-        }
-
         $afterScriptPath = config('home_dir').'/.filament/after';
         if (! File::isFile($afterScriptPath)) {
             return;

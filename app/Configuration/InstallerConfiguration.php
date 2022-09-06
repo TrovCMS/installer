@@ -76,6 +76,8 @@ abstract class InstallerConfiguration
 
     public const DEMO = 'demo';
 
+    public const WITH_NODE = 'with_node';
+
     public function __construct(array $keyMap)
     {
         $settings = $this->getSettings();

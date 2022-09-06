@@ -30,7 +30,7 @@ class SeedDemoData
             return;
         }
 
-        $this->consoleWriter->logStep('Running database seeding');
+        $this->consoleWriter->logStep('Running demo seeder');
 
         try {
             $this->database

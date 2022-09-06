@@ -127,16 +127,16 @@ class NewCommand extends InstallerCommand
             app(GenerateAppKey::class)();
             app(RevertToMix::class)();
 
-            $this->consoleWriter->panel('Adding Modules');
+            $this->consoleWriter->panel('Database Setup');
+            app(CreateDatabase::class)();
+            app(MigrateDatabase::class)();
+
+            $this->consoleWriter->panel('Installing Modules');
             app(InstallFaqsModule::class)();
             app(InstallAirportModule::class)();
             app(InstallDiscoveriesModule::class)();
             app(InstallSheetsModule::class)();
             app(InstallBlogModule::class)();
-
-            $this->consoleWriter->panel('Database Setup');
-            app(CreateDatabase::class)();
-            app(MigrateDatabase::class)();
 
             $this->consoleWriter->panel('Finishing Touches');
             app(InstallNpmDependencies::class)();
@@ -218,6 +218,7 @@ class NewCommand extends InstallerCommand
             'silent_exec' => InstallerConfiguration::SILENT_EXEC,
             'mix' => InstallerConfiguration::MIX,
             'demo' => InstallerConfiguration::DEMO,
+            'with-node' => InstallerConfiguration::WITH_NODE,
         ]);
 
         $savedConfiguration = new SavedConfiguration([
@@ -282,6 +283,7 @@ class NewCommand extends InstallerCommand
             InstallerConfiguration::SILENT_EXEC => true,
             InstallerConfiguration::MIX => false,
             InstallerConfiguration::DEMO => false,
+            InstallerConfiguration::WITH_NODE => false,
         ]);
 
         if ($this->consoleWriter->isDebug()) {

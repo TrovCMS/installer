@@ -7,11 +7,8 @@ use App\Actions\Concerns\InteractsWithNpm;
 use App\Actions\Concerns\InteractsWithStubs;
 use App\Actions\Concerns\ReplaceInFile;
 use App\ConsoleWriter;
-use App\InstallerException;
 use App\LogsToConsole;
 use App\Shell;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
 
 class InstallFaqsModule
 {
@@ -40,46 +37,19 @@ class InstallFaqsModule
 
         $this->consoleWriter->logStep('Installing FAQs Module');
 
-        try {
-            $timestamp = date('Y_m_d_His');
-            $filesystem = new Filesystem;
-            $migrationFiles = $filesystem->glob(config('installer.store.project_path').'/database/migrations/*');
+        $packageInstall = $this->shell->execInProject(sprintf(
+            'composer require trovcms/faqs-module %s %s',
+            config('installer.store.dev') ? ' dev-main' : '',
+            config('installer.store.with_output') ? '' : '--quiet'
+        ));
 
-            $migrations = collect($migrationFiles)->filter(fn ($file) => Str::contains($file, 'create_faqs_table'));
+        $this->abortIf(! $packageInstall->isSuccessful(), 'The FAQs Module installer did not complete successfully.', $packageInstall);
 
-            if ($migrations && config('installer.store.force_create')) {
-                $migrations->each(fn ($file) => $filesystem->delete($file));
-            } elseif ($migrations) {
-                $this->consoleWriter->warn('FAQs module is already installed in this project.');
+        $moduleInstall = $this->shell->execInProject('php artisan trov:faqs-install');
 
-                if (! $this->consoleWriter->confirm('Continue with installation? This will overwrite existing module.', false)) {
-                    $this->consoleWriter->note('FAQs module installation terminated.');
-
-                    return;
-                }
-
-                $migrations->each(fn ($file) => $filesystem->delete($file));
-            }
-
-            // Database
-            $this->publishStub('database/factories/FaqFactory.php', 'faqs/database/factories/FaqFactory.php');
-            $this->publishStub('database/migrations/'.$timestamp.'_create_faqs_tables.php', 'faqs/database/migrations/create_faqs_table.php');
-            $this->publishStub('database/seeders/FaqSeeder.php', 'faqs/database/seeders/FaqSeeder.php');
-
-            // Models
-            $this->publishStub('app/Models/Faq.php', 'faqs/models/Faq.php');
-
-            // Resources
-            $this->publishStubDirectory('app/Filament/Resources/', 'faqs/resources/');
-
-            // Controllers
-            $this->publishStub('app/Http/Controllers/FaqController.php', 'faqs/controllers/FaqController.php');
-
-            // Views
-            $this->publishStubDirectory('resources/views/faqs/', 'faqs/views/');
-        } catch (InstallerException $e) {
-            app('console-writer')->exception('Could not install FAQs Module.');
-            $this->error($e->getMessage());
+        if (! $moduleInstall->isSuccessful()) {
+            app('final-steps')->add('Run <span class="text-green-500">php artisan trov:faqs-install</span>');
+            $this->consoleWriter->warn('Failed to install FAQs module into TrovCMS.');
         }
 
         $this->consoleWriter->success('Successfully installed FAQs Module.');

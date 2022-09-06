@@ -60,5 +60,19 @@
     "prefer-stable": true,
     "bin": [
         "trov"
-    ]
+    ],
+    "repositories": {
+        "faqs-module": {
+            "type": "package",
+            "package": {
+                "name": "trovcms/faqs-module",
+                "version": "dev-main",
+                "source": {
+                    "url": "https://github.com/TrovCMS/faqs-module.git",
+                    "type": "git",
+                    "reference": "origin/main"
+                }
+            }
+        }
+    }
 }

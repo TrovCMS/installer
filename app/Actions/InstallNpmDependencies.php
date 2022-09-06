@@ -25,6 +25,13 @@ class InstallNpmDependencies
     {
         $this->consoleWriter->logStep('Installing node dependencies (Yea, this will take a while)');
 
+        if (! config('installer.store.with_node')) {
+            app('final-steps')->add('Run <span class="text-green-500">npm install && npm run build</span>');
+            $this->consoleWriter->warn('Node dependencies skipped.');
+
+            return;
+        }
+
         $this->installAndCompileNodeDependencies();
 
         $this->consoleWriter->success('Npm dependencies installed.');
