@@ -37,9 +37,9 @@ class InstallTrovCMS
         $this->abortIf(! $process->isSuccessful(), 'The TrovCMS installer did not complete successfully.', $process);
 
         $this->consoleWriter->success(sprintf(
-            "A new application '%s' has been created from the %s branch.",
-            config('installer.store.project_name'),
-            config('installer.store.dev') ? 'develop' : 'release'
+            "A new TrovCMS application has been created from the %s branch at '%s'.",
+            config('installer.store.dev') ? 'develop' : 'release',
+            config('installer.store.project_name')
         ));
     }
 }
