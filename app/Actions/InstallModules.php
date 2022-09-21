@@ -4,32 +4,28 @@ namespace App\Actions;
 
 use App\ConsoleWriter;
 use App\Shell;
-use App\Tools\Database;
 use Symfony\Component\Process\Process;
 
-class InstallTrovCMS
+class InstallModules
 {
     use AbortsCommands;
 
-    protected $shell;
+    private $shell;
 
-    protected $database;
+    private $consoleWriter;
 
-    protected $consoleWriter;
-
-    public function __construct(Shell $shell, Database $database, ConsoleWriter $consoleWriter)
+    public function __construct(Shell $shell, ConsoleWriter $consoleWriter)
     {
         $this->shell = $shell;
-        $this->database = $database;
         $this->consoleWriter = $consoleWriter;
     }
 
     public function __invoke()
     {
-        $this->consoleWriter->logStep('Finishing TrovCMS installation');
+        $this->consoleWriter->logStep('Running module installer');
 
         if (! config('installer.store.migrate_database')) {
-            app('final-steps')->add('Run <span class="text-green-500">php artisan trov:install --force</span>');
+            app('final-steps')->add('Run <span class="text-green-500">php artisan trov:add --force</span> to add any additional modules');
             $this->consoleWriter->note('Database not set up.');
 
             return;
@@ -38,7 +34,7 @@ class InstallTrovCMS
         $cwd = getcwd();
         chdir(config('installer.store.project_path'));
 
-        $process = Process::fromShellCommandline('php artisan trov:install --force');
+        $process = Process::fromShellCommandline('php artisan trov:add --force');
 
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             try {
@@ -52,7 +48,7 @@ class InstallTrovCMS
             $this->consoleWriter->write('    '.$line);
         });
 
-        $this->abortIf(! $process->isSuccessful(), 'TrovCMS installation failed.', $process);
+        $this->abortIf(! $process->isSuccessful(), 'Module installation failed.', $process);
 
         chdir($cwd);
     }

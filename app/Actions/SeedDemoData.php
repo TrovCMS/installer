@@ -32,6 +32,13 @@ class SeedDemoData
 
         $this->consoleWriter->logStep('Running demo seeder');
 
+        if (! config('installer.store.migrate_database')) {
+            $this->consoleWriter->note('Database not set up.');
+            app('final-steps')->add('Run <span class="text-green-500">php artisan db:seed --class=DemoSeeder</span>');
+
+            return;
+        }
+
         try {
             $this->database
                 ->fillFromInstallerStore(config('installer.store'))

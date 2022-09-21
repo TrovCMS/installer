@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\Actions\CreateDatabase;
+use App\Actions\CreateTrovCMSProject;
 use App\Actions\CustomizeDotEnv;
 use App\Actions\DisplayHelpScreen;
 use App\Actions\DisplayInstallerWelcome;
@@ -10,21 +11,14 @@ use App\Actions\EditConfigFile;
 use App\Actions\GenerateAppKey;
 use App\Actions\InitializeGitHubRepository;
 use App\Actions\InitializeGitRepository;
-use App\Actions\InstallAirportModule;
-use App\Actions\InstallBlogModule;
-use App\Actions\InstallDiscoveriesModule;
-use App\Actions\InstallFaqsModule;
+use App\Actions\InstallModules;
 use App\Actions\InstallNpmDependencies;
-use App\Actions\InstallSheetsModule;
 use App\Actions\InstallTrovCMS;
 use App\Actions\MigrateDatabase;
 use App\Actions\OpenInBrowser;
 use App\Actions\OpenInEditor;
 use App\Actions\PushToGitHub;
-use App\Actions\RevertToMix;
 use App\Actions\RunAfterScript;
-use App\Actions\RunShieldInstall;
-use App\Actions\SeedDatabase;
 use App\Actions\SeedDemoData;
 use App\Actions\UpgradeSavedConfiguration;
 use App\Actions\ValetLink;
@@ -116,29 +110,19 @@ class NewCommand extends InstallerCommand
         sleep(1);
 
         try {
-            $this->consoleWriter->panel('Dependencies');
             app(VerifyDependencies::class)();
             app(ValidateGitHubConfiguration::class)();
             app(VerifyPathAvailable::class)();
 
-            $this->consoleWriter->panel('TrovCMS');
-            app(InstallTrovCMS::class)();
+            app(CreateTrovCMSProject::class)();
             app(CustomizeDotEnv::class)();
             app(GenerateAppKey::class)();
-            app(RevertToMix::class)();
 
-            $this->consoleWriter->panel('Database Setup');
             app(CreateDatabase::class)();
             app(MigrateDatabase::class)();
 
-            $this->consoleWriter->panel('Installing Modules');
-            app(InstallFaqsModule::class)();
-            app(InstallAirportModule::class)();
-            app(InstallDiscoveriesModule::class)();
-            app(InstallSheetsModule::class)();
-            app(InstallBlogModule::class)();
+            app(InstallModules::class)();
 
-            $this->consoleWriter->panel('Finishing Touches');
             app(InstallNpmDependencies::class)();
             app(InitializeGitRepository::class)();
             app(RunAfterScript::class)();
@@ -147,13 +131,8 @@ class NewCommand extends InstallerCommand
             app(ValetLink::class)();
             app(ValetSecure::class)();
 
-            app(RunShieldInstall::class)();
-            app(SeedDatabase::class)();
-
-            if (config('installer.store.demo')) {
-                $this->consoleWriter->panel('Demo Installation');
-                app(SeedDemoData::class)();
-            }
+            app(InstallTrovCMS::class)();
+            app(SeedDemoData::class)();
 
             app(OpenInEditor::class)();
             app(OpenInBrowser::class)();
@@ -163,7 +142,7 @@ class NewCommand extends InstallerCommand
         }
 
         $this->consoleWriter->newLine();
-        $this->consoleWriter->panel('New TrovCMS project installed! <em>Make something great.</em>', 'success');
+        $this->consoleWriter->panel('New TrovCMS project created! <em>Make something great.</em>', 'success');
 
         if (count(app('final-steps')->all()) > 1) {
             $this->consoleWriter->note('Some items need to be set manually', 'Next Steps');

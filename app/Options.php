@@ -105,7 +105,7 @@ class Options
         [
             'short' => 'd',
             'long' => 'dev',
-            'cli_description' => 'Install Laravel using the develop branch',
+            'cli_description' => 'Install TrovCMS using the develop branch',
         ],
         [
             'long' => 'full',
@@ -115,34 +115,6 @@ class Options
             'short' => 'q',
             'long' => 'quiet',
             'cli_description' => 'Do not output to the console (except for user input)',
-        ],
-        [
-            'long' => 'faqs',
-            'cli_description' => 'Install FAQs Module',
-        ],
-        [
-            'long' => 'discoveries',
-            'cli_description' => 'Install Discovery Center Module (Topic and Articles)',
-        ],
-        [
-            'long' => 'airport',
-            'cli_description' => 'Install the Airport Module (Landing Pages)',
-        ],
-        [
-            'long' => 'sheets',
-            'cli_description' => 'Install Sheets Module (Unbranded Pages)',
-        ],
-        [
-            'long' => 'blog',
-            'cli_description' => 'Install Blog Module',
-        ],
-        [
-            'long' => 'all-modules',
-            'cli_description' => 'Install All Modules',
-        ],
-        [
-            'long' => 'mix',
-            'cli_description' => 'Revert to Laravel Mix',
         ],
         [
             'long' => 'demo',

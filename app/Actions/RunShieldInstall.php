@@ -23,6 +23,8 @@ class RunShieldInstall
     public function __invoke()
     {
         if (! config('installer.store.migrate_database')) {
+            app('final-steps')->add('Run <span class="text-green-500">php artisan shield:install --fresh</span>');
+
             return;
         }
 

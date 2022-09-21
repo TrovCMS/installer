@@ -27,7 +27,7 @@ class InstallNpmDependencies
 
         if (! config('installer.store.with_node')) {
             app('final-steps')->add('Run <span class="text-green-500">npm install && npm run build</span>');
-            $this->consoleWriter->warn('Node dependencies skipped.');
+            $this->consoleWriter->note('Node dependencies skipped.');
 
             return;
         }
